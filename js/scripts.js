@@ -62,7 +62,7 @@ var getRandomCard = function() {
   return Math.floor(Math.random() * 52) + 1;
 }
 
-var deal = function() {
+var dealTwo = function() {
   card1 = getRandomCard();
 
   do {
@@ -71,20 +71,31 @@ var deal = function() {
 
   var index1 = card1 - 1;
   var index2 = card2 - 1;
-  console.log(allCards[index1].id + " " + allCards[index1].played)
-  console.log(allCards[index2].id + " " + allCards[index2].played)
+  // console.log(allCards[index1].id + " " + allCards[index1].played)
+  // console.log(allCards[index2].id + " " + allCards[index2].played)
 
   allCards[index1].cardPlayed();
   allCards[index2].cardPlayed();
-  console.log(allCards[index1].id + " " + allCards[index1].played)
-  console.log(allCards[index2].id + " " + allCards[index2].played)
+  // console.log(allCards[index1].id + " " + allCards[index1].played)
+  // console.log(allCards[index2].id + " " + allCards[index2].played)
+  
+}
+
+var dealOne = function() {
+  var anId = getRandomCard();
+  var aCard = 0;
+  do {
+    aCard = allCards[anId - 1]
+  } while (aCard.played === true);
+  // console.log(aCard.id + " " + aCard.played);
+  aCard.played = true;
+  // console.log(aCard.id + " " + aCard.played);
   
 }
 
 createCards();
-
-
-deal()
+// dealTwo()
+dealOne();
 
 // allCards.forEach(function(card) {
 //   console.log(card.id + " " + card.number + " "+ card.suit + " " + card.value)
