@@ -62,19 +62,29 @@ var getRandomCard = function() {
   return Math.floor(Math.random() * 52) + 1;
 }
 
-
 var deal = function() {
   card1 = getRandomCard();
 
   do {
     card2 = getRandomCard();
   } while (card1 === card2);
+
+  var index1 = card1 - 1;
+  var index2 = card2 - 1;
+  console.log(allCards[index1].id + " " + allCards[index1].played)
+  console.log(allCards[index2].id + " " + allCards[index2].played)
+
+  allCards[index1].cardPlayed();
+  allCards[index2].cardPlayed();
+  console.log(allCards[index1].id + " " + allCards[index1].played)
+  console.log(allCards[index2].id + " " + allCards[index2].played)
+  
 }
 
-deal()
-console.log( card1 + " " + card2)
+createCards();
 
-// createCards();
+
+deal()
 
 // allCards.forEach(function(card) {
 //   console.log(card.id + " " + card.number + " "+ card.suit + " " + card.value)
