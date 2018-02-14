@@ -88,10 +88,10 @@ var endTurn = function() {
   dealerPlay();
   if (dealerTurn.hand > playerTurn.hand && dealerTurn.hand < 22) {
     console.log ("dealer wins");
-    // dealer.chips += 10;
+    // dealer.chips += 10; //CHANGE LATER TO BE AMOUNT THAT WAS BET
   } else if (playerTurn.hand > dealerTurn.hand && playerTurn.hand < 22) {
     console.log ("player wins");
-    // allPlayers[0].chips += 10;
+    // allPlayers[0].chips += 10; //CHANGE LATER TO BE AMOUNT THAT WAS BET
   } else {
     console.log("no one wins")
   }
@@ -120,6 +120,19 @@ var dealTwo = function(aPlayer) {
   console.log (allCards[index1].value + " " + allCards[index2].value)
 
   aPlayer.hand += parseInt(allCards[index1].value) + parseInt(allCards[index2].value);
+
+  if (aPlayer.hand > 21) {
+    console.log("you lose");
+    //allPlayers[0].chips -= 50 //CHANGE LATER TO BE WHAT WAS BET
+    //dealer.chips += 50; //CHANGE LATER TO BE WHAT WAS BET
+    switchPlayers();
+    playerTurn = new CurrentTurn(allPlayers[0]);
+  } else if (aPlayer.hand === 21) {
+    console.log("BLACKJACK");
+    //allPlayers[0].chips += 50 //CHANGE LATE TO BE WHAT WAS BET
+    switchPlayers()
+    playerTurn = new CurrentTurn(allPlayers[0]);
+  }
   console.log(aPlayer.hand + " " + aPlayer.player.name)
 }
 
@@ -133,6 +146,19 @@ var dealOne = function(aPlayer) {
 
   console.log(aCard.value)
   aPlayer.hand += parseInt(aCard.value);
+
+  if (aPlayer.hand > 21) {
+    console.log("you lose");
+    //allPlayers[0].chips -= 50 //CHANGE LATER TO BE WHAT WAS BET
+    //dealer.chips += 50; //CHANGE LATER TO BE WHAT WAS BET
+    switchPlayers();
+    playerTurn = new CurrentTurn(allPlayers[0]);
+  } else if (aPlayer.hand === 21) {
+    console.log("BLACKJACK");
+    //allPlayers[0].chips += 50 //CHANGE LATE TO BE WHAT WAS BET
+    switchPlayers()
+    playerTurn = new CurrentTurn(allPlayers[0]);
+  }
   console.log(aPlayer.hand + " " + aPlayer.player.name)  
 }
 
