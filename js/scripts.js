@@ -6,7 +6,12 @@ var allPlayers = [];
 function Player(name, id) {
   this.name = name;
   this.id = id;
-  this.score = 0;
+  this.chips = 500;
+}
+
+var dealer = {
+  name: "Dealer",
+  chips: 500
 }
 
 function Card(id) {
@@ -50,11 +55,10 @@ var createCards = function() {
     if (card.number === 11 || card.number === 12) {
       card.value = 10;
     } else if (card.number === 13) {
-      card.value = [1,11];
+      card.value = 0; // CHANGE THIS LATER TO HAVE USER CHOOSE IF 1 OR 11
     } else {
       card.value = card.number
     }
-
     allCards.push(card);
   }
 }
@@ -68,15 +72,39 @@ var switchPlayers = function() {
   allPlayers.push(allPlayers.shift());
 }
 
-var thisTurn = new CurrentTurn(allPlayers[0]);
+var playerTurn = new CurrentTurn(allPlayers[0]);
+var dealerTurn = new CurrentTurn(dealer);
 
 
+var dealerPlay = function() {
+  dealerTurn = new CurrentTurn(dealer);
+  dealTwo(dealerTurn);
+  do {
+    dealOne(dealerTurn);
+  } while (dealerTurn.hand < 17);
+}
+
+var endTurn = function() {
+  dealerPlay();
+  if (dealerTurn.hand > playerTurn.hand && dealerTurn.hand < 22) {
+    console.log ("dealer wins");
+    // dealer.chips += 10;
+  } else if (playerTurn.hand > dealerTurn.hand && playerTurn.hand < 22) {
+    console.log ("player wins");
+    // allPlayers[0].chips += 10;
+  } else {
+    console.log("no one wins")
+  }
+  switchPlayers();
+  playerTurn = new CurrentTurn(allPlayers[0])
+  console.log(playerTurn.player.name)
+}
 
 var getRandomCard = function() {
   return Math.floor(Math.random() * 52) + 1;
 }
 
-var dealTwo = function() {
+var dealTwo = function(aPlayer) {
   card1 = getRandomCard();
 
   do {
@@ -91,11 +119,11 @@ var dealTwo = function() {
 
   console.log (allCards[index1].value + " " + allCards[index2].value)
 
-  thisTurn.hand += parseInt(allCards[index1].value) + parseInt(allCards[index2].value);
-  console.log(thisTurn.hand + " " + thisTurn.player.name)
+  aPlayer.hand += parseInt(allCards[index1].value) + parseInt(allCards[index2].value);
+  console.log(aPlayer.hand + " " + aPlayer.player.name)
 }
 
-var dealOne = function() {
+var dealOne = function(aPlayer) {
   var anId = getRandomCard();
   var aCard = 0;
   do {
@@ -104,15 +132,15 @@ var dealOne = function() {
   aCard.played = true;
 
   console.log(aCard.value)
-  thisTurn.hand += parseInt(aCard.value);
-  console.log(thisTurn.hand + " " + thisTurn.player.name)  
+  aPlayer.hand += parseInt(aCard.value);
+  console.log(aPlayer.hand + " " + aPlayer.player.name)  
 }
 
 createCards();
 
 
 
-dealTwo()
+dealTwo(playerTurn)
 // dealOne();
 
 // allCards.forEach(function(card) {
