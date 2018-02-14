@@ -1,4 +1,6 @@
 var allCards = []
+var card1;
+var card2;
 
 function Player(name, id) {
   this.name = name;
@@ -16,6 +18,11 @@ function Card(id) {
 
 Card.prototype.cardPlayed = function() {
   return this.played = true;
+}
+
+function currentTurn(player) {
+  this.player = player;
+  this.score = 0;
 }
 
 var createCards = function() {
@@ -46,13 +53,29 @@ var createCards = function() {
     } else {
       card.value = card.number
     }
-    
+
     allCards.push(card);
   }
 }
 
-createCards();
+var getRandomCard = function() {
+  return Math.floor(Math.random() * 52) + 1;
+}
 
-allCards.forEach(function(card) {
-  console.log(card.id + " " + card.number + " "+ card.suit + " " + card.value)
-} )
+
+var deal = function() {
+  card1 = getRandomCard();
+
+  do {
+    card2 = getRandomCard();
+  } while (card1 === card2);
+}
+
+deal()
+console.log( card1 + " " + card2)
+
+// createCards();
+
+// allCards.forEach(function(card) {
+//   console.log(card.id + " " + card.number + " "+ card.suit + " " + card.value)
+// } )
