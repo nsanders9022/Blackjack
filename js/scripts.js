@@ -1,6 +1,7 @@
 var allCards = []
 var card1;
 var card2;
+var allPlayers = [];
 
 function Player(name, id) {
   this.name = name;
@@ -20,9 +21,9 @@ Card.prototype.cardPlayed = function() {
   return this.played = true;
 }
 
-function currentTurn(player) {
+function CurrentTurn(player) {
   this.player = player;
-  this.score = 0;
+  this.hand = 0;
 }
 
 var createCards = function() {
@@ -58,6 +59,19 @@ var createCards = function() {
   }
 }
 
+var player1 = new Player("player1", 1);
+allPlayers.push(player1);
+var player2 = new Player("player2", 2);
+allPlayers.push(player2);
+
+var switchPlayers = function() {
+  allPlayers.push(allPlayers.shift());
+}
+
+var thisTurn = new CurrentTurn(allPlayers[0]);
+
+
+
 var getRandomCard = function() {
   return Math.floor(Math.random() * 52) + 1;
 }
@@ -71,14 +85,14 @@ var dealTwo = function() {
 
   var index1 = card1 - 1;
   var index2 = card2 - 1;
-  // console.log(allCards[index1].id + " " + allCards[index1].played)
-  // console.log(allCards[index2].id + " " + allCards[index2].played)
 
   allCards[index1].cardPlayed();
   allCards[index2].cardPlayed();
-  // console.log(allCards[index1].id + " " + allCards[index1].played)
-  // console.log(allCards[index2].id + " " + allCards[index2].played)
-  
+
+  console.log (allCards[index1].value + " " + allCards[index2].value)
+
+  thisTurn.hand += parseInt(allCards[index1].value) + parseInt(allCards[index2].value);
+  console.log(thisTurn.hand + " " + thisTurn.player.name)
 }
 
 var dealOne = function() {
@@ -87,16 +101,33 @@ var dealOne = function() {
   do {
     aCard = allCards[anId - 1]
   } while (aCard.played === true);
-  // console.log(aCard.id + " " + aCard.played);
   aCard.played = true;
-  // console.log(aCard.id + " " + aCard.played);
-  
+
+  console.log(aCard.value)
+  thisTurn.hand += parseInt(aCard.value);
+  console.log(thisTurn.hand + " " + thisTurn.player.name)  
 }
 
 createCards();
-// dealTwo()
-dealOne();
+
+
+
+dealTwo()
+// dealOne();
 
 // allCards.forEach(function(card) {
 //   console.log(card.id + " " + card.number + " "+ card.suit + " " + card.value)
 // } )
+
+
+//Check to see that cards are being marked as played
+// var notPlayed = function() {
+//   var notPlayedArray = [];
+//   allCards.forEach(function(card) {
+//     if (card.played === false) {
+//       notPlayedArray.push(card);
+//     }
+//   })
+
+//   return notPlayedArray.length;
+// }
