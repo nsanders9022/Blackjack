@@ -2,7 +2,9 @@ var allCards = []
 var card1;
 var card2;
 var allPlayers = [];
+var playerCount;
 
+//Constructors
 function Player(name, id) {
   this.name = name;
   this.id = id;
@@ -22,15 +24,17 @@ function Card(id) {
   this.played = false;
 }
 
-Card.prototype.cardPlayed = function() {
-  return this.played = true;
-}
-
 function CurrentTurn(player) {
   this.player = player;
   this.hand = 0;
 }
 
+//marks a card as played
+Card.prototype.cardPlayed = function() {
+  return this.played = true;
+}
+
+//Generates all 52 cards
 var createCards = function() {
   for (var i = 1; i < 53; i++) {
     var card = new Card(i)
@@ -52,34 +56,38 @@ var createCards = function() {
       card.suit = "Diamonds";
     }
 
-    if (card.number === 11 || card.number === 12) {
+    if (card.number >= 11 && card.number <= 13) {
       card.value = 10;
-    } else if (card.number === 13) {
-      card.value = setAce(); // CHANGE THIS LATER TO HAVE USER CHOOSE IF 1 OR 11
+    } else if (card.number === 1) {
+      card.value = 1; // CHANGE THIS LATER TO HAVE USER CHOOSE IF 1 OR 11
     } else {
       card.value = card.number
     }
     allCards.push(card);
   }
+
+  allCards.forEach(function(card) {
+    console.log (card.id + " " + card.value + " " + card.suit)
+  })
 }
 
+
+
+//Function to let the user determine if the ace will be a 1 or an 11 - NEED TO FINISH
 var setAce = function() {
   return 1;
 }
 
-var player1 = new Player("player1", 1);
-// allPlayers.push(player1);
-// var player2 = new Player("player2", 2);
-// allPlayers.push(player2);
-
+//Moves to the next player
 var switchPlayers = function() {
   allPlayers.push(allPlayers.shift());
 }
 
+//creates CurrentTurn objects
 var playerTurn = new CurrentTurn(allPlayers[0]);
 var dealerTurn = new CurrentTurn(dealer);
 
-
+//dealer draws cards
 var dealerPlay = function() {
   dealerTurn = new CurrentTurn(dealer);
   dealTwo(dealerTurn);
@@ -88,6 +96,9 @@ var dealerPlay = function() {
   } while (dealerTurn.hand < 17);
 }
 
+//What happens when a player ends their turn
+//The dealer plays
+//The next player is selected
 var endTurn = function() {
   dealerPlay();
   if (dealerTurn.hand > playerTurn.hand && dealerTurn.hand < 22) {
@@ -104,10 +115,13 @@ var endTurn = function() {
   console.log(playerTurn.player.name)
 }
 
+//Gets a random number between 1 and 52
 var getRandomCard = function() {
   return Math.floor(Math.random() * 52) + 1;
 }
 
+//gets 2 cards and mark them as played
+//Adds card total to the current turn hand 
 var dealTwo = function(aPlayer) {
   card1 = getRandomCard();
 
@@ -140,6 +154,8 @@ var dealTwo = function(aPlayer) {
   console.log(aPlayer.hand + " " + aPlayer.player.name)
 }
 
+//gets card and marks it as played
+//Adds card total to the current turn hand 
 var dealOne = function(aPlayer) {
   var anId = getRandomCard();
   var aCard = 0;
@@ -165,11 +181,6 @@ var dealOne = function(aPlayer) {
   }
   console.log(aPlayer.hand + " " + aPlayer.player.name)  
 }
-
-createCards();
-
-// dealTwo(playerTurn)
-// dealOne(playerTurn);
 
 //dynamically creates inputs for each player's user name
 function usernameFields() {
@@ -203,19 +214,13 @@ function usernameFields() {
   nameForm.appendChild(button)
 }
 
-// function createPlayers(nameArray) {
-//   for (var i = 0; i < nameArray.length; i++) {
-//     var newPlayer = new Player (i+1, nameArray[i])
-//     players.push(newPlayer);
-//   }
-// }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var playerCount = 0;
 
 $(document).ready(function() {
 
+  createCards();
 
   $("#player-count").submit(function(event) {
     event.preventDefault();
@@ -238,9 +243,6 @@ $(document).ready(function() {
         allPlayers.push(newPlayer);
       }
 
-      // createPlayers(nameArray);
-
-      // console.log(players)
       var playerInfo = document.getElementById("player-info");
       for (var i = 0; i < allPlayers.length; i++) {
         playerInfo.innerHTML += '<div id = player' + i+1 +'info>' + allPlayers[i].name + ': ' +  allPlayers[i].chips + '</div>'

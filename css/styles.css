@@ -1,0 +1,30 @@
+#name-div {
+    display: none;
+}
+
+form, #name-form{
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    text-align: center;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    background-color: rgba(140, 140, 140, 0.8);
+    padding: 5%;
+  
+  }
+  
+  label {
+    font-size: 30px;
+    color: red;
+    text-align: left;
+  }
+  
+  input {
+    color: black;
+    font-size: 20px;
+  }
+
+  #player-count-card {
+      height: 100px;
+  }
