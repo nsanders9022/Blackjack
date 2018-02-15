@@ -25,6 +25,6 @@ form, #name-form{
     font-size: 20px;
   }
 
-  #player-count-card {
+  .player-count-card {
       height: 100px;
   }
