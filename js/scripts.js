@@ -68,9 +68,9 @@ var setAce = function() {
 }
 
 var player1 = new Player("player1", 1);
-allPlayers.push(player1);
-var player2 = new Player("player2", 2);
-allPlayers.push(player2);
+// allPlayers.push(player1);
+// var player2 = new Player("player2", 2);
+// allPlayers.push(player2);
 
 var switchPlayers = function() {
   allPlayers.push(allPlayers.shift());
@@ -168,44 +168,84 @@ var dealOne = function(aPlayer) {
 
 createCards();
 
-// exports.gameModule = {
-//   Player: Player,
-//   dealer: dealer,
-//   Card: Card,
-//   CurrentTurn: CurrentTurn,
-//   createCards: createCards,
-//   setAce: setAce,
-//   switchPlayers: switchPlayers,
-//   dealerPlay: dealerPlay,
-//   endTurn: endTurn,
-//   getRandomCard: getRandomCard,
-//   dealTwo: dealTwo,
-//   dealOne, dealOne
-// }
-
-exports.playerModule = Player;
-exports.dealerModule = dealer;
-exports.cardModule = Card;
-exports.currentTurnModule = CurrentTurn;
-
-
-
 // dealTwo(playerTurn)
 // dealOne(playerTurn);
 
-// allCards.forEach(function(card) {
-//   console.log(card.id + " " + card.number + " "+ card.suit + " " + card.value)
-// } )
+//dynamically creates inputs for each player's user name
+function usernameFields() {
+  var nameForm = document.getElementById("name-form");
 
+  while (nameForm.hasChildNodes()) {
+    nameForm.removeChild(nameForm.lastChild);
+  }
 
-//Check to see that cards are being marked as played
-// var notPlayed = function() {
-//   var notPlayedArray = [];
-//   allCards.forEach(function(card) {
-//     if (card.played === false) {
-//       notPlayedArray.push(card);
-//     }
-//   })
+  for (i = 0; i < playerCount; i++) {
+    var label = document.createElement("label");
+    var labelText = document.createTextNode("Player " + (i+1) + " user name");
+    label.appendChild(labelText);
+    nameForm.appendChild(label);
 
-//   return notPlayedArray.length;
+    var input = document.createElement("input");
+    input.type = "text";
+    input.name = "player" + i;
+    input.id = "player" + i;
+    input.class = "playerNameInput";
+    nameForm.appendChild(input);
+    nameForm.appendChild(document.createElement("br"));
+  }
+
+  var button = document.createElement("button");
+  button.setAttribute("class","btn btn-primary");
+  button.setAttribute("id", "name-button");
+  button.setAttribute("name", "button");
+  var buttonText = document.createTextNode("Play");
+  button.appendChild(buttonText);
+  nameForm.appendChild(button)
+}
+
+// function createPlayers(nameArray) {
+//   for (var i = 0; i < nameArray.length; i++) {
+//     var newPlayer = new Player (i+1, nameArray[i])
+//     players.push(newPlayer);
+//   }
 // }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var playerCount = 0;
+
+$(document).ready(function() {
+
+
+  $("#player-count").submit(function(event) {
+    event.preventDefault();
+
+    playerCount = parseInt($("input:radio[name=count]:checked").val());
+
+    console.log(playerCount);
+
+    $(".player-count").hide();
+    //form is displayed with inputs for each player's username
+    usernameFields();
+    $("#name-div").show()
+
+    //when username form is submitted...
+    $("#name-button").click(function() {
+      $("#name-div").hide();
+      for (var i = 0; i < playerCount; i++) {
+        var playerName = $("#player" + [i]).val();
+        var newPlayer = new Player(playerName, i+1);
+        allPlayers.push(newPlayer);
+      }
+
+      // createPlayers(nameArray);
+
+      // console.log(players)
+      var playerInfo = document.getElementById("player-info");
+      for (var i = 0; i < allPlayers.length; i++) {
+        playerInfo.innerHTML += '<div id = player' + i+1 +'info>' + allPlayers[i].name + ': ' +  allPlayers[i].chips + '</div>'
+      }
+    })
+  })
+
+})
