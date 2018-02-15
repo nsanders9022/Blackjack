@@ -1,7 +1,7 @@
-var Game = require('./../js/scripts.js').gameModule;
+var Player = require('./../js/scripts.js').playerModule;
 
 $(document).ready(function() {
-    var currentGame = new Game();
+    var newPlayer = new Player("bob");
 
-    $("#player1Name").text(currentGame.allPlayers[0].name)
+    $("#player1Name").text("newPlayer.name")
 })
