@@ -55,12 +55,16 @@ var createCards = function() {
     if (card.number === 11 || card.number === 12) {
       card.value = 10;
     } else if (card.number === 13) {
-      card.value = 0; // CHANGE THIS LATER TO HAVE USER CHOOSE IF 1 OR 11
+      card.value = setAce(); // CHANGE THIS LATER TO HAVE USER CHOOSE IF 1 OR 11
     } else {
       card.value = card.number
     }
     allCards.push(card);
   }
+}
+
+var setAce = function() {
+  return 1;
 }
 
 var player1 = new Player("player1", 1);
@@ -165,9 +169,27 @@ var dealOne = function(aPlayer) {
 createCards();
 
 
+exports.gameModule = {
+  Player: Player,
+  dealer: dealer,
+  Card: Card,
+  CurrentTurn: CurrentTurn,
+  createCards: createCards,
+  setAce: setAce,
+  switchPlayers: switchPlayers,
+  dealerPlay: dealerPlay,
+  endTurn: endTurn,
+  getRandomCard: getRandomCard,
+  dealTwo: dealTwo,
+  dealOne, dealOne
 
-dealTwo(playerTurn)
-// dealOne();
+}
+
+
+
+
+// dealTwo(playerTurn)
+// dealOne(playerTurn);
 
 // allCards.forEach(function(card) {
 //   console.log(card.id + " " + card.number + " "+ card.suit + " " + card.value)
