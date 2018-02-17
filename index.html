@@ -9,48 +9,64 @@
   <title>Blackjack</title>
 </head>
 <body>
-  <h1>Blackjack</h1>
+  <div class="container">
 
-  <!-- askes user for number of players -->
-  <div class="player-count">
-    <form class="form-group" id="player-count">
-      <label for="howManyPlayers">How many players?</label>
-      <div class="radio">
-        <label>
-          <input type="radio" name="count" value="1"> 
-          <img class="player-count-card" src="img/1.png"  
-        </label>
-      </div>
-      <div class="radio">
-        <label>
-          <input type="radio" name="count" value="2"> 
-          <img class="player-count-card" src="img/15.png"  
-        </label>
-      </div>
-      <div class="radio">
-        <label>
-          <input type="radio" name="count" value="3"> 
-          <img class="player-count-card" src="img/29.png"  
-        </label>
-      </div>
-      <div class="radio">
-        <label>
-          <input type="radio" name="count" value="4"> 
-          <img class="player-count-card" src="img/43.png"  
-        </label>
-      </div>
-      <button type="submit" class="btn btn-primary" name="button">Enter</button>
-  </div>
-
-   <!-- beginning name form -->
-   <div id="name-div">
-    <div id="name-form">
-
-    </div>
-  </div>
-
-  <div id="player-info">
+    <h1>Blackjack</h1>
     
-  </div>
+    <!-- askes user for number of players -->
+    <div class="player-count">
+      <form class="form-group" id="player-count">
+        <label for="howManyPlayers">Number of Players</label>
+        <div class="row">
+          <div class="col-sm-3">
+            <div class="radio">
+              <label>
+                <input type="radio" name="count" value="1"> 
+                <img class="player-count-card" src="img/1.png">  
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="radio">
+              <label>
+                <input type="radio" name="count" value="2"> 
+                <img class="player-count-card" src="img/15.png">  
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="radio">
+              <label>
+                <input type="radio" name="count" value="3"> 
+                <img class="player-count-card" src="img/29.png">  
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="radio">
+              <label>
+                <input type="radio" name="count" value="4"> 
+                <img class="player-count-card" src="img/43.png">  
+              </label>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="submit-count btn btn-primary" name="button">Enter</button>
+      </form>
+    </div>
+      
+    <!-- beginning name form -->
+    <div id="name-div">
+      <div id="name-form">
+      </div>
+    </div>
+    
+    <div id="player-info"> 
+    </div>
 
+    <div id="game">
+      <button class="play-turn btn btn-primary"></button>
+    </div>
+
+  </div>
 </body>

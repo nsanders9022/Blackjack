@@ -65,10 +65,9 @@ var createCards = function() {
     }
     allCards.push(card);
   }
-
-  allCards.forEach(function(card) {
-    console.log (card.id + " " + card.value + " " + card.suit)
-  })
+  // allCards.forEach(function(card) {
+  //   console.log (card.id + " " + card.value + " " + card.suit)
+  // })
 }
 
 
@@ -151,7 +150,7 @@ var dealTwo = function(aPlayer) {
     switchPlayers()
     playerTurn = new CurrentTurn(allPlayers[0]);
   }
-  console.log(aPlayer.hand + " " + aPlayer.player.name)
+  // console.log(aPlayer.hand + " " + aPlayer.player.name)
 }
 
 //gets card and marks it as played
@@ -183,7 +182,7 @@ var dealOne = function(aPlayer) {
 }
 
 //dynamically creates inputs for each player's user name
-function usernameFields() {
+var usernameFields = function() {
   var nameForm = document.getElementById("name-form");
 
   while (nameForm.hasChildNodes()) {
@@ -192,7 +191,7 @@ function usernameFields() {
 
   for (i = 0; i < playerCount; i++) {
     var label = document.createElement("label");
-    var labelText = document.createTextNode("Player " + (i+1) + " user name");
+    var labelText = document.createTextNode("Player" + (i+1) + " Name: ");
     label.appendChild(labelText);
     nameForm.appendChild(label);
 
@@ -216,15 +215,13 @@ function usernameFields() {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 $(document).ready(function() {
 
   createCards();
 
   $("#player-count").submit(function(event) {
     event.preventDefault();
-
+    // debugger;
     playerCount = parseInt($("input:radio[name=count]:checked").val());
 
     console.log(playerCount);
@@ -233,7 +230,7 @@ $(document).ready(function() {
     //form is displayed with inputs for each player's username
     usernameFields();
     $("#name-div").show()
-
+     
     //when username form is submitted...
     $("#name-button").click(function() {
       $("#name-div").hide();
@@ -242,12 +239,19 @@ $(document).ready(function() {
         var newPlayer = new Player(playerName, i+1);
         allPlayers.push(newPlayer);
       }
-
+      
       var playerInfo = document.getElementById("player-info");
+      var colWidth = 12/allPlayers.length;
       for (var i = 0; i < allPlayers.length; i++) {
-        playerInfo.innerHTML += '<div id = player' + i+1 +'info>' + allPlayers[i].name + ': ' +  allPlayers[i].chips + '</div>'
+        playerInfo.innerHTML += '<div class=col-sm-' + colWidth + ' id= player' + i+1 +'info>' + allPlayers[i].name + ': ' +  allPlayers[i].chips + '</div>'
       }
+      
+      $("#game").show();
+      $(".play-turn").text(allPlayers[0].name + "'s turn")
+      
+      $(".play-turn").click(function() {
+        dealTwo(playerTurn)
+      })
     })
   })
-
 })
