@@ -155,12 +155,8 @@ var dealTwo = function(aPlayer) {
   }
   // console.log(aPlayer.hand + " " + aPlayer.player.name)
 
-  $("#card-1").prepend('<img class="player-hand-images" src="./img/' + aPlayer.cards[0].number + '.png">')
-  $("#card-2").prepend('<img class="player-hand-images" src="./img/' + aPlayer.cards[1].number + '.png">')
-  
-
-
-
+  $("#card-0").prepend('<img class="player-hand-images" src="./img/' + aPlayer.cards[0].id + '.png">')
+  $("#card-1").prepend('<img class="player-hand-images" src="./img/' + aPlayer.cards[1].id + '.png">')
 }
 
 //gets card and marks it as played
@@ -172,10 +168,13 @@ var dealOne = function(aPlayer) {
     aCard = allCards[anId - 1]
   } while (aCard.played === true);
   aCard.played = true;
+  aPlayer.cards.push(aCard);
 
   console.log(aCard.value)
   aPlayer.hand += parseInt(aCard.value);
-  aPlayer.cards.push(aCard);
+
+  var cardIndex = aPlayer.cards.indexOf(aCard);
+  $("#card-" + cardIndex).prepend('<img class="player-hand-images" src="./img/' + aPlayer.cards[cardIndex].id + '.png">')
   
 
   if (aPlayer.hand > 21) {
@@ -190,7 +189,6 @@ var dealOne = function(aPlayer) {
     switchPlayers()
     playerTurn = new CurrentTurn(allPlayers[0]);
   }
-  console.log(aPlayer.hand + " " + aPlayer.player.name)  
 }
 
 //dynamically creates inputs for each player's user name
@@ -262,7 +260,11 @@ $(document).ready(function() {
       $(".play-turn").text(allPlayers[0].name + "'s turn")
       
       $(".play-turn").click(function() {
-        dealTwo(playerTurn)
+        dealTwo(playerTurn);
+      })
+
+      $("#hit").click(function() {
+        dealOne(playerTurn);
       })
     })
   })
