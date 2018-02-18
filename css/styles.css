@@ -52,3 +52,7 @@ input {
     text-align: center;
     font-size: 24px;
 }
+
+.player-hand-images {
+    height: 200px;
+}

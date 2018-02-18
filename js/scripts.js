@@ -27,6 +27,7 @@ function Card(id) {
 function CurrentTurn(player) {
   this.player = player;
   this.hand = 0;
+  this.cards = [];
 }
 
 //marks a card as played
@@ -127,15 +128,17 @@ var dealTwo = function(aPlayer) {
   do {
     card2 = getRandomCard();
   } while (card1 === card2);
-
+  
   var index1 = card1 - 1;
   var index2 = card2 - 1;
-
+  
   allCards[index1].cardPlayed();
   allCards[index2].cardPlayed();
-
+  
   console.log (allCards[index1].value + " " + allCards[index2].value)
-
+  aPlayer.cards.push(allCards[index1]);
+  aPlayer.cards.push(allCards[index2]);
+  
   aPlayer.hand += parseInt(allCards[index1].value) + parseInt(allCards[index2].value);
 
   if (aPlayer.hand > 21) {
@@ -151,6 +154,13 @@ var dealTwo = function(aPlayer) {
     playerTurn = new CurrentTurn(allPlayers[0]);
   }
   // console.log(aPlayer.hand + " " + aPlayer.player.name)
+
+  $("#card-1").prepend('<img class="player-hand-images" src="./img/' + aPlayer.cards[0].number + '.png">')
+  $("#card-2").prepend('<img class="player-hand-images" src="./img/' + aPlayer.cards[1].number + '.png">')
+  
+
+
+
 }
 
 //gets card and marks it as played
@@ -165,6 +175,8 @@ var dealOne = function(aPlayer) {
 
   console.log(aCard.value)
   aPlayer.hand += parseInt(aCard.value);
+  aPlayer.cards.push(aCard);
+  
 
   if (aPlayer.hand > 21) {
     console.log("you lose");
