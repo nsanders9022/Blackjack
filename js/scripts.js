@@ -135,7 +135,7 @@ var dealTwo = function(aPlayer) {
   allCards[index1].cardPlayed();
   allCards[index2].cardPlayed();
   
-  console.log (allCards[index1].value + " " + allCards[index2].value)
+  console.log (allCards[index1].value + " " + allCards[index2].value + " " + aPlayer.player.name)
   aPlayer.cards.push(allCards[index1]);
   aPlayer.cards.push(allCards[index2]);
   
@@ -244,6 +244,7 @@ $(document).ready(function() {
     //when username form is submitted...
     $("#name-button").click(function() {
       $("#name-div").hide();
+      
       for (var i = 0; i < playerCount; i++) {
         var playerName = $("#player" + [i]).val();
         var newPlayer = new Player(playerName, i+1);
@@ -255,18 +256,18 @@ $(document).ready(function() {
       for (var i = 0; i < allPlayers.length; i++) {
         playerInfo.innerHTML += '<div class=col-sm-' + colWidth + ' id= player' + i+1 +'info>' + allPlayers[i].name + ': ' +  allPlayers[i].chips + '</div>'
       }
+
+      playerTurn = new CurrentTurn(allPlayers[0])
       
       $("#game").show();
-      $(".play-turn").text(allPlayers[0].name + "'s turn")
+      $(".play-turn").text(playerTurn.player.name + "'s turn")
       
       $(".play-turn").click(function() {
-        $("#card-0 > img").remove();
-        $("#card-1 > img").remove();
-        $("#card-2 > img").remove();
-        $("#card-3 > img").remove();
-        $("#card-4 > img").remove();        
-        $("#card-5 > img").remove();
+        $(".card-deal").find("img").remove();       
         dealTwo(playerTurn);
+        $("#hit").show();
+        $("#stay").show();
+        $(".play-turn").hide()
       })
 
       $("#hit").click(function() {
@@ -274,13 +275,16 @@ $(document).ready(function() {
       })
 
       $("#stay").click(function() {
-        $("#card-0 > img").remove();
-        $("#card-1 > img").remove();
-        $("#card-2 > img").remove();
-        $("#card-3 > img").remove();
-        $("#card-4 > img").remove();        
-        $("#card-5 > img").remove();
+        $(".card-deal").find("img").remove();
         endTurn();
+
+        // $(".play-turn").text("");
+        // $(".play-turn").text(allPlayers[0].name + "'s turn");   
+
+        $(".play-turn").show();
+
+        $("#hit").hide();
+        $("#stay").hide();
       })
     })
   })
