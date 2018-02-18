@@ -260,11 +260,27 @@ $(document).ready(function() {
       $(".play-turn").text(allPlayers[0].name + "'s turn")
       
       $(".play-turn").click(function() {
+        $("#card-0 > img").remove();
+        $("#card-1 > img").remove();
+        $("#card-2 > img").remove();
+        $("#card-3 > img").remove();
+        $("#card-4 > img").remove();        
+        $("#card-5 > img").remove();
         dealTwo(playerTurn);
       })
 
       $("#hit").click(function() {
         dealOne(playerTurn);
+      })
+
+      $("#stay").click(function() {
+        $("#card-0 > img").remove();
+        $("#card-1 > img").remove();
+        $("#card-2 > img").remove();
+        $("#card-3 > img").remove();
+        $("#card-4 > img").remove();        
+        $("#card-5 > img").remove();
+        endTurn();
       })
     })
   })
