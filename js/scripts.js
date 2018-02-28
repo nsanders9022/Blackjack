@@ -98,14 +98,13 @@ var dealerTurn = new CurrentTurn(dealer);
 
 //dealer draws cards
 var dealerPlay = function() { //NOT WORKING. DOESN'T STOP AT 17
+  $("#player-turn-name").text(dealerTurn.player.name)      
   dealerTurn = new CurrentTurn(dealer);
   dealTwo(dealerTurn);
   console.log("deeeaaaalller hand " + dealerTurn.hand)
   while (dealerTurn.hand < 17) {
     dealOne(dealerTurn)
   }
-
-
   // do {
   //   dealOne(dealerTurn);
   // } while (dealerTurn.hand < 17);
@@ -118,20 +117,20 @@ var endTurn = function() {
   dealerPlay();
   console.log("dealer hand: " + dealerHandTotal + " player hand: " + playerHandTotal)
   if (dealerHandTotal > playerHandTotal && dealerHandTotal < 22) {
-    status = -1
+    status = parseInt(-1)
     checkStatus();
     // console.log ("dealer wins");
     // dealer.chips += 10; //CHANGE LATER TO BE AMOUNT THAT WAS BET
   } else if (playerHandTotal > dealerHandTotal && playerHandTotal < 22) {
-    status = 1
+    status = parseInt(1)
     checkStatus();
     // console.log ("player wins");
     // allPlayers[0].chips += 10; //CHANGE LATER TO BE AMOUNT THAT WAS BET
   } else if (dealerHandTotal > 21 && playerHandTotal < 21) {
-    status = 1;
+    status = parseInt(1);
     checkStatus();
   } else {
-    status = 0
+    status = parseInt(0)
     checkStatus();
     // console.log("no one wins")
   }
@@ -148,13 +147,13 @@ var getRandomCard = function() {
 
 var checkStatus = function() {
   if (status < 0) {
-    console.log("Dealer wins this hand")
-  } else if (status === 1) {
-    console.log(aPlayer.player.name + " wins this hand")
-  } else if (status === 2) {
-    console.log(aPlayer.player.name + " got BLACKJACK!")
+    $("#result-text").text("Dealer wins this hand")
+  } else if (status == 1) {
+    $("#result-text").text(playerTurn.player.name + " wins this hand")
+  } else if (status == 2) {
+    $("#result-text").text(playerTurn.player.name + " got BLACKJACK!")
   } else {
-    console.log("hmmmmmmmmm");
+    $("#result-text").text("hmmmmmmmmm");
   }
 }
 
@@ -190,18 +189,19 @@ var dealTwo = function(aPlayer) {
     dealerHandTotal = aPlayer.hand;
   } else {
     playerHandTotal = aPlayer.hand;
+    $("#player-turn-name").text(currentPlayerTurn.player.name)
   }
 
 
   if (aPlayer.name != "Dealer") {
     if (aPlayer.hand > 21) {
-      status = -1;
+      status = parseInt(-1);
       checkStatus()
       // console.log("you lose");
       //allPlayers[0].chips -= 50 //CHANGE LATER TO BE WHAT WAS BET
       //dealer.chips += 50; //CHANGE LATER TO BE WHAT WAS BET
     } else if (aPlayer.hand === 21) {
-      status = 2;
+      status = parseInt(2);
       checkStatus()
       // console.log("BLACKJACK");
       //allPlayers[0].chips += 50 //CHANGE LATE TO BE WHAT WAS BET
@@ -246,7 +246,7 @@ var dealOne = function(aPlayer) {
   
 
   if (aPlayer.hand > 21) {
-    status = -1
+    status = parseInt(-1);
     checkStatus();
     // console.log("you lose");
     //allPlayers[0].chips -= 50 //CHANGE LATER TO BE WHAT WAS BET
@@ -254,7 +254,7 @@ var dealOne = function(aPlayer) {
     switchPlayers();
     playerTurn = new CurrentTurn(allPlayers[0]);
   } else if (aPlayer.hand === 21) {
-    status = 2
+    status = parseInt(2);
     checkStatus();
     // console.log("BLACKJACK");
     //allPlayers[0].chips += 50 //CHANGE LATE TO BE WHAT WAS BET
@@ -332,6 +332,7 @@ $(document).ready(function() {
       currentPlayerTurn = new CurrentTurn(allPlayers[0])
       
       $("#game").show();
+      $("#player-turn-name").text(currentPlayerTurn.player.name)      
       $(".play-turn").text(currentPlayerTurn.player.name + "'s turn")
       
       $(".play-turn").click(function() {
@@ -350,9 +351,6 @@ $(document).ready(function() {
         // debugger;
         $(".card-deal").find("img").remove();
         endTurn();
-
-        // $(".play-turn").text("");
-        // $(".play-turn").text(allPlayers[0].name + "'s turn");   
 
         $(".play-turn").show();
 
