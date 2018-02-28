@@ -13,7 +13,7 @@ h1 {
     text-align: center;
 }
 
-#name-div, #game, #hit, #stay {
+#name-div, #game, #hit, #stay, #dealer {
     display: none;
 }
 

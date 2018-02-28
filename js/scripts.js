@@ -1,8 +1,13 @@
 var allCards = []
-var card1;
-var card2;
+// var card1;
+// var card2;
 var allPlayers = [];
 var playerCount;
+var status = 0; // 0 = in play; 1 = player wins; -1 = dealer wins; 2 = blackjack;
+var playerHandTotal = 0;
+var dealerHandTotal = 0;
+var currentPlayerTurn;
+
 
 //Constructors
 function Player(name, id) {
@@ -29,6 +34,11 @@ function CurrentTurn(player) {
   this.hand = 0;
   this.cards = [];
 }
+
+// function CurrrentRound() {
+//   this.player = allPlayers[0];
+//   this.dealer = dealer;
+// }
 
 //marks a card as played
 Card.prototype.cardPlayed = function() {
@@ -72,7 +82,6 @@ var createCards = function() {
 }
 
 
-
 //Function to let the user determine if the ace will be a 1 or an 11 - NEED TO FINISH
 var setAce = function() {
   return 1;
@@ -88,12 +97,18 @@ var playerTurn = new CurrentTurn(allPlayers[0]);
 var dealerTurn = new CurrentTurn(dealer);
 
 //dealer draws cards
-var dealerPlay = function() {
+var dealerPlay = function() { //NOT WORKING. DOESN'T STOP AT 17
   dealerTurn = new CurrentTurn(dealer);
   dealTwo(dealerTurn);
-  do {
-    dealOne(dealerTurn);
-  } while (dealerTurn.hand < 17);
+  console.log("deeeaaaalller hand " + dealerTurn.hand)
+  while (dealerTurn.hand < 17) {
+    dealOne(dealerTurn)
+  }
+
+
+  // do {
+  //   dealOne(dealerTurn);
+  // } while (dealerTurn.hand < 17);
 }
 
 //What happens when a player ends their turn
@@ -101,15 +116,26 @@ var dealerPlay = function() {
 //The next player is selected
 var endTurn = function() {
   dealerPlay();
-  if (dealerTurn.hand > playerTurn.hand && dealerTurn.hand < 22) {
-    console.log ("dealer wins");
+  console.log("dealer hand: " + dealerHandTotal + " player hand: " + playerHandTotal)
+  if (dealerHandTotal > playerHandTotal && dealerHandTotal < 22) {
+    status = -1
+    checkStatus();
+    // console.log ("dealer wins");
     // dealer.chips += 10; //CHANGE LATER TO BE AMOUNT THAT WAS BET
-  } else if (playerTurn.hand > dealerTurn.hand && playerTurn.hand < 22) {
-    console.log ("player wins");
+  } else if (playerHandTotal > dealerHandTotal && playerHandTotal < 22) {
+    status = 1
+    checkStatus();
+    // console.log ("player wins");
     // allPlayers[0].chips += 10; //CHANGE LATER TO BE AMOUNT THAT WAS BET
+  } else if (dealerHandTotal > 21 && playerHandTotal < 21) {
+    status = 1;
+    checkStatus();
   } else {
-    console.log("no one wins")
+    status = 0
+    checkStatus();
+    // console.log("no one wins")
   }
+
   switchPlayers();
   playerTurn = new CurrentTurn(allPlayers[0])
   console.log(playerTurn.player.name)
@@ -120,40 +146,73 @@ var getRandomCard = function() {
   return Math.floor(Math.random() * 52) + 1;
 }
 
+var checkStatus = function() {
+  if (status < 0) {
+    console.log("Dealer wins this hand")
+  } else if (status === 1) {
+    console.log(aPlayer.player.name + " wins this hand")
+  } else if (status === 2) {
+    console.log(aPlayer.player.name + " got BLACKJACK!")
+  } else {
+    console.log("hmmmmmmmmm");
+  }
+}
+
 //gets 2 cards and mark them as played
 //Adds card total to the current turn hand 
 var dealTwo = function(aPlayer) {
-  card1 = getRandomCard();
+  var card1Id = getRandomCard();
+  var aCard2 = 0;
+  var aCard1 = 0;
 
   do {
-    card2 = getRandomCard();
-  } while (card1 === card2);
+    var card2Id = getRandomCard();
+  } while (card1Id === card2Id);
   
-  var index1 = card1 - 1;
-  var index2 = card2 - 1;
-  
-  allCards[index1].cardPlayed();
-  allCards[index2].cardPlayed();
-  
-  console.log (allCards[index1].value + " " + allCards[index2].value + " " + aPlayer.player.name)
-  aPlayer.cards.push(allCards[index1]);
-  aPlayer.cards.push(allCards[index2]);
-  
-  aPlayer.hand += parseInt(allCards[index1].value) + parseInt(allCards[index2].value);
+  aCard1 = allCards[card1Id - 1];
+  aCard2 = allCards[card2Id - 1];
 
-  if (aPlayer.hand > 21) {
-    console.log("you lose");
-    //allPlayers[0].chips -= 50 //CHANGE LATER TO BE WHAT WAS BET
-    //dealer.chips += 50; //CHANGE LATER TO BE WHAT WAS BET
-    switchPlayers();
-    playerTurn = new CurrentTurn(allPlayers[0]);
-  } else if (aPlayer.hand === 21) {
-    console.log("BLACKJACK");
-    //allPlayers[0].chips += 50 //CHANGE LATE TO BE WHAT WAS BET
+  aCard1.cardPlayed();
+  aCard2.cardPlayed();
+
+  aPlayer.cards.push(aCard1);
+  aPlayer.cards.push(aCard2);
+  console.log(aPlayer.cards)
+
+  aPlayer.hand += parseInt(aCard1.value);
+  aPlayer.hand += parseInt(aCard2.value);
+
+  console.log(aPlayer.hand) 
+  console.log ("card 1: " + aCard1.value + " card 2: " + aCard2.value + " name: " + aPlayer.player.name)
+  console.log("hand total: " + aPlayer.hand)
+
+  if (aPlayer.player.name === "Dealer") {
+    dealerHandTotal = aPlayer.hand;
+  } else {
+    playerHandTotal = aPlayer.hand;
+  }
+
+
+  if (aPlayer.name != "Dealer") {
+    if (aPlayer.hand > 21) {
+      status = -1;
+      checkStatus()
+      // console.log("you lose");
+      //allPlayers[0].chips -= 50 //CHANGE LATER TO BE WHAT WAS BET
+      //dealer.chips += 50; //CHANGE LATER TO BE WHAT WAS BET
+    } else if (aPlayer.hand === 21) {
+      status = 2;
+      checkStatus()
+      // console.log("BLACKJACK");
+      //allPlayers[0].chips += 50 //CHANGE LATE TO BE WHAT WAS BET
+    }
+    
     switchPlayers()
     playerTurn = new CurrentTurn(allPlayers[0]);
+
   }
-  // console.log(aPlayer.hand + " " + aPlayer.player.name)
+
+   // console.log(aPlayer.hand + " " + aPlayer.player.name)
 
   $("#card-0").prepend('<img class="player-hand-images" src="./img/' + aPlayer.cards[0].id + '.png">')
   $("#card-1").prepend('<img class="player-hand-images" src="./img/' + aPlayer.cards[1].id + '.png">')
@@ -167,24 +226,37 @@ var dealOne = function(aPlayer) {
   do {
     aCard = allCards[anId - 1]
   } while (aCard.played === true);
-  aCard.played = true;
+  aCard.cardPlayed();
   aPlayer.cards.push(aCard);
 
-  console.log(aCard.value)
   aPlayer.hand += parseInt(aCard.value);
-
+  console.log("hand total: " + aPlayer.hand)
+  
+  
   var cardIndex = aPlayer.cards.indexOf(aCard);
+
+  console.log("new card: " + aCard.value + " name: " + aPlayer.player.name)
   $("#card-" + cardIndex).prepend('<img class="player-hand-images" src="./img/' + aPlayer.cards[cardIndex].id + '.png">')
+
+  if (aPlayer.player.name === "Dealer") {
+    dealerHandTotal = aPlayer.hand;
+  } else {
+    playerHandTotal = aPlayer.hand;
+  }
   
 
   if (aPlayer.hand > 21) {
-    console.log("you lose");
+    status = -1
+    checkStatus();
+    // console.log("you lose");
     //allPlayers[0].chips -= 50 //CHANGE LATER TO BE WHAT WAS BET
     //dealer.chips += 50; //CHANGE LATER TO BE WHAT WAS BET
     switchPlayers();
     playerTurn = new CurrentTurn(allPlayers[0]);
   } else if (aPlayer.hand === 21) {
-    console.log("BLACKJACK");
+    status = 2
+    checkStatus();
+    // console.log("BLACKJACK");
     //allPlayers[0].chips += 50 //CHANGE LATE TO BE WHAT WAS BET
     switchPlayers()
     playerTurn = new CurrentTurn(allPlayers[0]);
@@ -233,14 +305,14 @@ $(document).ready(function() {
     event.preventDefault();
     // debugger;
     playerCount = parseInt($("input:radio[name=count]:checked").val());
-
+    
     console.log(playerCount);
-
+    
     $(".player-count").hide();
     //form is displayed with inputs for each player's username
     usernameFields();
     $("#name-div").show()
-     
+    
     //when username form is submitted...
     $("#name-button").click(function() {
       $("#name-div").hide();
@@ -256,25 +328,26 @@ $(document).ready(function() {
       for (var i = 0; i < allPlayers.length; i++) {
         playerInfo.innerHTML += '<div class=col-sm-' + colWidth + ' id= player' + i+1 +'info>' + allPlayers[i].name + ': ' +  allPlayers[i].chips + '</div>'
       }
-
-      playerTurn = new CurrentTurn(allPlayers[0])
+      
+      currentPlayerTurn = new CurrentTurn(allPlayers[0])
       
       $("#game").show();
-      $(".play-turn").text(playerTurn.player.name + "'s turn")
+      $(".play-turn").text(currentPlayerTurn.player.name + "'s turn")
       
       $(".play-turn").click(function() {
         $(".card-deal").find("img").remove();       
-        dealTwo(playerTurn);
+        dealTwo(currentPlayerTurn);
         $("#hit").show();
         $("#stay").show();
         $(".play-turn").hide()
       })
 
       $("#hit").click(function() {
-        dealOne(playerTurn);
+        dealOne(currentPlayerTurn);
       })
 
       $("#stay").click(function() {
+        // debugger;
         $(".card-deal").find("img").remove();
         endTurn();
 
@@ -289,3 +362,5 @@ $(document).ready(function() {
     })
   })
 })
+
+// Fix name that is shown in button
